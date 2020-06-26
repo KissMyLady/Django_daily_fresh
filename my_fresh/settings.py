@@ -109,7 +109,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'daily_sql',
         'USER': 'root',
-        'PASSWORD': 'YING123ZZ',
+        'PASSWORD': 'PASSWORD',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -163,9 +163,9 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBacke
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.qq.com'
 EMAIL_PORT = 25
-EMAIL_HOST_USER = 'kiss_mylady@qq.com'
-EMAIL_HOST_PASSWORD = 'sgngqtmfnkmpfega'  # 通过邮箱发送短信获取
-EMAIL_FROM = '基地工程<kiss_mylady@qq.com>'
+EMAIL_HOST_USER = 'your@qq.com'
+EMAIL_HOST_PASSWORD = 'yourcode'  # 通过邮箱发送短信获取
+EMAIL_FROM = '<your@qq.com>'
 
 
 # 配置搜索引擎

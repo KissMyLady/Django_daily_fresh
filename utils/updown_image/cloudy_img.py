@@ -10,8 +10,8 @@ def down_load_of_Binary(file_data):
 	:return:
 	'''
 	from qiniu import Auth, etag, put_data
-	access_key = "LfXjXvG1e6vPXV2UFLfXrJ14uNM792vqONhnLyB2"
-	secret_key = "MRL5Y67LWpl_9_pOUPa7OvSY-t8OD9R2pR3luUA_"
+	access_key = "LfXjXvG1e6vPXV2UFLfXrJ14u2vqONh----"
+	secret_key = "MRL5Y67LWpl_9_pOUPa7Ot8OD9R2pR3----"
 	
 	q = Auth(access_key, secret_key)
 	
