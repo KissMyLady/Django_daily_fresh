@@ -22,14 +22,16 @@
     {% for sku in skus %}
         <ul class="cart_list_td clearfix">
             <li class="col01"><input type="checkbox" name="" checked></li>
-            <li class="col02"><img src="{{ sku.image.url }}"></li>
+            <li class="col02">
+                <a href="/goods/{{sku.id}}">
+                    <img src="{{ sku.image.url }}"></a></li>
             <li class="col03">{{ sku.name }}<br><em>{{ sku.price }}元/{{ sku.unite }}</em></li>
             <li class="col04">{{ sku.unite }}</li>
             <li class="col05">{{ sku.price }}元</li>
             <li class="col06">
                 <div class="num_add">
                     <a href="javascript:;" class="add fl">+</a>
-                    <input type="text" class="num_show fl" value="{{ sku.count }}">
+                    <input type="text" sku_id="{{ sku.id }}" class="num_show fl" value="{{ sku.count }}">
                     <a href="javascript:;" class="minus fl">-</a>
                 </div>
             </li>

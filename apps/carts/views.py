@@ -38,7 +38,7 @@ class CartInfoShow(LoginRequiredMixin, View):
             # 动态增加属性
             sku.amount = amount
             sku.count = count.decode("utf-8")
-    
+            
             # 添加
             skus.append(sku)
             total_count += int(count.decode("utf-8"))
@@ -83,6 +83,7 @@ def addCart(request):
 
         # 查询
         try:
+            print("sku_id: ", sku_id)
             sku = GoodsSKU.objects.get(id=sku_id)
             print("sku: ", sku, "type(sku): ", type(sku))
         except Exception as e:
@@ -158,9 +159,9 @@ class UpdataAjax(LoginRequiredMixin, View):
         
         # 校验商品是否存在
         try:
-            sku = GoodsSKU.objectsget(id=sku_id)
+            sku = GoodsSKU.objects.get(id=sku_id)
         except:
-            return JsonResponse({"res": 3, "errmsg":"商品不存在"})
+            return JsonResponse({"res": 3, "errmsg": "商品不存在"})
         
         conn = get_redis_connection("default")
         cart_key = "cart_%d" % (user.id)
@@ -182,11 +183,9 @@ class UpdataAjax(LoginRequiredMixin, View):
     
     def get(self, request):
         return HttpResponse("仅限POST请求")
-    
+
 
 # 删除购物车记录
-# 采用ajax post请求
-# 前端需要传递的参数:商品的id(sku_id)
 # /cart/delete
 class DeleteAjax(LoginRequiredMixin, View):
     def post(self, request):
@@ -204,7 +203,7 @@ class DeleteAjax(LoginRequiredMixin, View):
         try:
             sku = GoodsSKU.objects.get(id=sku_id)
         except GoodsSKU.DoesNotExist:
-            return JsonResponse({'res':2, 'errmsg':'商品不存在'})
+            return JsonResponse({'res': 2, 'errmsg': '商品不存在'})
 
 
         conn = get_redis_connection('default')

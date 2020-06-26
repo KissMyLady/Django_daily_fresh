@@ -101,6 +101,7 @@ function update_remote_cart_info(sku_id, count) {
 $('.add').click(function () {
     // 获取商品的id和商品的数量
     sku_id = $(this).next().attr('sku_id')
+
     count = $(this).next().val()
 
     // 加1

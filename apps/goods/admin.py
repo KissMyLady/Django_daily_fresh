@@ -11,6 +11,8 @@ from django.core.cache import cache
 # 基础继承类, 每次行新增或删除文件后, 重新刷新缓存index文件 使用celery异步执行
 # windows不支持celery, 这里选择暂时注释
 class BaseModelAdmin(admin.ModelAdmin):
+	list_per_page = 20
+	
 	def save_model(self, request, obj, form, change):
 		'''新增或更新表中的数据时调用'''
 		super().save_model(request, obj, form, change)
@@ -39,15 +41,15 @@ class GoodsTypeAdmin(BaseModelAdmin):
 
 
 class IndexGoodsBannerAdmin(BaseModelAdmin):
-	pass
+	list_display = ['id', 'sku', 'index']
 
 
 class IndexTypeGoodsBannerAdmin(BaseModelAdmin):
-	pass
+	list_display = ['id', 'type', 'sku', 'display_type', 'index']
 
 
 class IndexPromotionBannerAdmin(BaseModelAdmin):
-	pass
+	list_display = ['id', 'name', 'url', 'image', 'index']
 
 
 class GoodsSKUAdmin(BaseModelAdmin):
