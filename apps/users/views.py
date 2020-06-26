@@ -190,6 +190,8 @@ class UserInfoView(LoginRequiredMixin, View):
 		address = Address.objects.get_default_address(user)
 		
 		# 获取用户的历史浏览记录
+		# from redis import StrictRedis
+		# sr = StrictRedis(host='127.0.0.1', port='6379', db=3)
 		con = get_redis_connection('default')
 		history_key = 'history_%d' % user.id
 
@@ -205,6 +207,7 @@ class UserInfoView(LoginRequiredMixin, View):
 		
 		# # 组织上下文
 		context = {'page': 'user',
+		           'user':user,
 		 		   'address': address,
 		           "goods_li": goods_li}
 		
@@ -217,23 +220,19 @@ class UserOrderView(LoginRequiredMixin, View):
 	def get(self, request):
 		return render(request, "user_center_order.html", {"page": "order"})
 
-	
-# 森民路 燕子街 36号兴旺超市代收
+
 # 用户地址页面
 class UserAddressView(LoginRequiredMixin, View):
 	def get(self, request):
 		user = request.user
-		
 		try:
 			address = Address.objects.get_default_address(user)
-			print("自定义模型类方法 address: ", address)
 		except:
 			address = None
 		
 		return render(request, "user_center_address.html", {"page": "address", "address": address})
 	
 	def post(self, request):
-		
 		# 获取参数
 		receiver = request.POST.get("receiver")   # 收货人
 		addr = request.POST.get("addr")           # 地址
@@ -254,7 +253,6 @@ class UserAddressView(LoginRequiredMixin, View):
 		
 		# 打开models.py 自定义(方法)模型管理器类
 		address = Address.objects.get_default_address(user)
-		print("address是否有默认地址? : ", address)
 		if address is None:
 			is_default = True
 		else:

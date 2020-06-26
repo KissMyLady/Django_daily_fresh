@@ -14,9 +14,9 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = [
 	
 	# 用户中心
-	re_path(r"^info",    UserInfoView.as_view(),    name="user"),
-	re_path(r"^order",   UserOrderView.as_view(),   name="order"),
-	re_path(r"^address", login_required(UserAddressView.as_view()), name="address"),
+	re_path(r"^info",    UserInfoView.as_view(),    name="user"),   # 用户中心页面
+	re_path(r"^order",   UserOrderView.as_view(),   name="order"),  # 订单页面 购物车
+	re_path(r"^address", login_required(UserAddressView.as_view()), name="address"),  # 地址页面
 	
 	re_path(r"^login",    LoginView.as_view(), name="login"),     # 登录
 	re_path(r"^logout",   views.LogoutView,    name="logout"),    # 退出登录

@@ -1,5 +1,11 @@
 import os, sys
 
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SECRET_KEY = 'lqn!i8wnk07hb$jaww)93yl&%(d-8h8mcts7(+6j4(&rza)s$c'
+DEBUG = True
+ALLOWED_HOSTS = ["*"]
+
 # 邮箱激活有效时间 单位:秒
 EMAIL_ACITVATE_EXPIRE = 3600
 
@@ -15,13 +21,14 @@ CLOUDY_IMG_URL_PREFIX = 'http://qbg25zlw0.bkt.clouddn.com/'
 # 设置Django的文件存储类-自定义储存类型
 DEFAULT_FILE_STORAGE='utils.DFS.storage.FDFSStorage'
 
+# 首页缓存时间 单位:秒
+INDEX_CASH_CACHE_EXPIRE = 3600
 
-# -------------------------------------------------------------------
-# -------------------------------------------------------------------
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = 'lqn!i8wnk07hb$jaww)93yl&%(d-8h8mcts7(+6j4(&rza)s$c'
-DEBUG = True
-ALLOWED_HOSTS = ["*"]
+
+sys.path.insert(1, os.path.join(BASE_DIR, 'libs'))
+sys.path.insert(2, os.path.join(BASE_DIR, 'utils'))
+from utils import Logging
+from utils import updown_image  # 图片上传 云平台
 
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 INSTALLED_APPS = [
@@ -31,16 +38,27 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'carts', 'goods', 'orders', 'users',
-    'tinymce',  # 注册富文本编辑器, 然后在下面设置内容
-    'haystack',
+    'carts', 'goods', 'orders', 'users',  # 4个App注册
+    'tinymce',   # 注册富文本编辑器, 然后在下面设置内容
+    'haystack',  # 启用全文检索框架
 ]
+
 
 # 副文本编辑器配置  这里只在后台管理用
 TINYMCE_DEFAULT_CONFIG = {
-    'theme': 'advacnced',  # 主题 高级
+    # 'theme': 'advacnced',  # 主题 高级
+    'theme': 'mobile',
     'width': 600,
     'height': 400,
+    'language': 'zh_CN',
+     'plugins': [
+            'powerpaste table advlist autolink lists link charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars code fullscreen',
+            'insertdatetime nonbreaking save table contextmenu directionality',
+            'emoticons textcolor colorpicker textpattern image code codesample toc pagebreak'],
+    'toolbar1': 'undo redo | table | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+    'toolbar2': 'print preview | forecolor backcolor emoticons | codesample | pagebreak | toc | fullscreen',
+
 }
 
 MIDDLEWARE = [
@@ -82,13 +100,6 @@ STATICFILES_DIRS = (
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
 
-sys.path.insert(1, os.path.join(BASE_DIR, 'libs'))
-sys.path.insert(1, os.path.join(BASE_DIR, 'utils'))
-
-# 导入自建模块
-from utils import Logging
-from utils import celery_tasks
-from utils import updown_image  # 图片上传 云平台
 
 
 WSGI_APPLICATION = 'my_fresh.wsgi.application'
@@ -136,7 +147,7 @@ USE_TZ = True
 CACHES = {
     "default": {
          "BACKEND": "django_redis.cache.RedisCache",
-          "LOCATION": "redis://127.0.0.1:6379/3",
+          "LOCATION": "redis://127.0.0.1:6379/0",
           "OPTIONS": {
                     "CLIENT_CLASS": "django_redis.client.DefaultClient",
                     "CONNECTION_POOL_KWARGS": {"max_connections": 100}
@@ -155,3 +166,17 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = 'kiss_mylady@qq.com'
 EMAIL_HOST_PASSWORD = 'sgngqtmfnkmpfega'  # 通过邮箱发送短信获取
 EMAIL_FROM = '基地工程<kiss_mylady@qq.com>'
+
+
+# 配置搜索引擎
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        # 使用whoosh引擎 py path: /lib/package/
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        # 索引文件路径 设置生成的索引文件的路径(文件)
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
+}
+
+# 当添加、修改、删除数据时，自动生成索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
