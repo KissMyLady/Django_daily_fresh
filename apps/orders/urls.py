@@ -5,9 +5,13 @@ from orders.views import OrderPlaceInfo
 from orders.views import OredrCommit_badlock
 from orders.views import OrderPayView
 from orders.views import CheckPay
+from orders.views import Comment
 
 
 urlpatterns = [
+	# 评价
+	re_path(r"comment/(?P<order_id>.+)$", Comment.as_view(), name="comment"),
+	
 	# 支付后, 状态查询
 	re_path(r"check", CheckPay.as_view(), name="check"),
 	

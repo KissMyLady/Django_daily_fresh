@@ -1,4 +1,19 @@
 update_goods_amount()
+// 评论点击事件
+$('#tag_detail_first').click(function () {
+    $('#tag_comment_first').removeClass('active');
+    $(this).addClass('active');
+    $('#tab_commodity_detail').show();
+    $('#tab_comment_detail').hide();
+});
+
+$('#tag_comment_first').click(function () {
+    $('#tag_detail_first').removeClass('active');
+    $(this).addClass('active');
+    $('#tab_commodity_detail').hide();
+    $('#tab_comment_detail').show();
+});
+
 
 // 计算商品的总价格
 function update_goods_amount() {
